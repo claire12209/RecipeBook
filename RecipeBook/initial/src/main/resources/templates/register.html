@@ -10,11 +10,13 @@
     <form th:action="@{/register}" th:object="${user}" method="post">
         <div>
             <label for="username">Username:</label>
-            <input type="text" id="username" th:field="*{username}" />
+            <input type="text" id="username" th:field="*{username}" required />
         </div>
         <div>
             <label for="password">Password:</label>
-            <input type="password" id="password" th:field="*{password}" />
+            <input type="password" id="password" th:field="*{password}" minlength="8" required />
+            <!-- Error message for password validation -->
+            <p th:if="${#fields.hasErrors('password')}" th:errors="*{password}">Password must be at least 8 characters long</p>
         </div>
         <div>
             <button type="submit">Register</button>

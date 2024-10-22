@@ -10,6 +10,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 @Controller
 @RequestMapping("/register")
 public class RegistrationController {
+
     @Autowired
     private UserService userService;
 
@@ -20,8 +21,14 @@ public class RegistrationController {
     }
 
     @PostMapping
-    public String registerUser(User user) {
-        userService.registerUser(user); // Register the user
+    public String registerUser(User user, Model model) {
+        // Check if the password meets the minimum length requirement
+        if (user.getPassword().length() < 8) {
+            model.addAttribute("error", "Password must be at least 8 characters long.");
+            return "register"; // Return to the registration form with an error message
+        }
+        
+        userService.registerUser(user); // Register the user if validation passes
         return "redirect:/login"; // Redirect to the login page
     }
 }

@@ -19,7 +19,7 @@ public class SecurityConfig {
         http
             .authorizeHttpRequests(authorizeRequests ->
                 authorizeRequests
-                    .requestMatchers("/register", "/register/**", "/home").permitAll()  // Permit access to home, register page
+                    .requestMatchers("/register", "/register/**", "/home" ).permitAll()  // Permit access to home, register page
                     .anyRequest().authenticated()  // All other pages require authentication
             )
             .formLogin(form -> form
