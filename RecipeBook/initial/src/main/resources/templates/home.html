@@ -6,6 +6,38 @@
 </head>
 <body>
     <h2>Welcome to the Recipe Book</h2>
-    <p><a th:href="@{/login}">Login</a> | <a th:href="@{/register}">Register</a></p>
+    <p>
+        <a th:href="@{/login}">Login</a> | <a th:href="@{/register}">Register</a>
+        | <a th:href="@{/profile}" class="btn btn-primary">Go to Profile</a>
+    </p>
+
+    <!-- Search Form -->
+    <form th:action="@{/search}" method="get">
+        <label for="search">Search Recipes:</label>
+        <input type="text" id="search" name="query" placeholder="Search by name or ingredient">
+        <button type="submit">Search</button>
+    </form>
+
+    <!-- Category Search Form -->
+    <form th:action="@{/recipesByCategory}" method="get">
+        <label for="category">Filter by Category:</label>
+        <select id="category" name="categoryId">
+            <option value="">Select Category</option>
+            <option th:each="category : ${categories}" 
+                    th:value="${category.id}" 
+                    th:text="${category.name}">Category</option>
+        </select>
+        <button type="submit">Filter</button>
+    </form>
+
+    <h3>All Recipes</h3>
+    <ul>
+        <th:block th:each="recipe : ${recipes}">
+            <li>
+                <a th:href="@{/recipe/{id}(id=${recipe.id})}" th:text="${recipe.name}">Recipe Title (ID: ${recipe.id})</a>
+            </li>
+        </th:block>
+    </ul>
 </body>
 </html>
+

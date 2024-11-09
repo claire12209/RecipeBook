@@ -18,3 +18,4 @@ public class ProfileController {
         return "profile"; // Ensure profile.html exists and displays the user's info
     }
 }
+

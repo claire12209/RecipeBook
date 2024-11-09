@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>Recipe Details</title>
+</head>
+<body>
+    <h1 th:text="${recipe.name}">Recipe Name</h1>
+
+    <p>Added by: 
+        <span th:text="${recipe.user != null ? recipe.user.username : 'Unknown'}">Username</span>
+    </p> <!-- Show added user -->
+
+    <h2>Ingredients</h2>
+    <ol>
+        <th:block th:each="ingredient : ${recipe.ingredients}">
+            <li th:text="${ingredient}">Ingredient</li>
+        </th:block>
+    </ol>
+
+    <h2>Steps</h2>
+    <ol>
+        <th:block th:each="step : ${recipe.steps}">
+            <li th:text="${step}">Step</li>
+        </th:block>
+    </ol>
+
+    <a href="/home">Back to Home</a>
+</body>
+</html>

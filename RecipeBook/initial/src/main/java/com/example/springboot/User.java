@@ -5,6 +5,10 @@ import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.Table;
+import jakarta.persistence.ManyToOne;
+import jakarta.persistence.JoinColumn;
+import jakarta.persistence.*;
+import java.util.List;  // Import the List class
 
 @Entity
 @Table(name = "users")
@@ -16,7 +20,10 @@ public class User {
 
     private String username;
     private String password;
-    private boolean enabled; // This should be defined
+    private boolean enabled; // Ensure this matches the variable name
+
+    @OneToMany(mappedBy = "user")
+    private List<Recipe> recipes;  // This maps the user to their recipes
 
     // Getters and setters
     public Long getId() {
@@ -43,11 +50,11 @@ public class User {
         this.password = password;
     }
 
-    public boolean isEnabled() { // Make sure this matches the variable name
+    public boolean isEnabled() { 
         return enabled;
     }
 
-    public void setEnabled(boolean enabled) { // Make sure this matches the variable name
-        this.enabled = enabled; // This line should correctly reference the variable
+    public void setEnabled(boolean enabled) {
+        this.enabled = enabled;
     }
 }
