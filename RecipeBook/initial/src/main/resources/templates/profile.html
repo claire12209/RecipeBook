@@ -11,6 +11,16 @@
         <li>Username: <span th:text="${username}"></span></li>
         <li>Password: <span th:text="${password}"></span> (hashed)</li>
     </ul>
+    
+    <h3>Your Folders</h3>
+    <ul th:if="${folders != null}" th:each="folder : ${folders}">
+        <li th:text="${folder.name}"></li>
+    </ul>
+    <form th:action="@{/createFolder}" method="post">
+        <input type="text" name="folderName" placeholder="Enter Folder Name"/>
+        <button type="submit">Create Folder</button>
+    </form>
+
     <a th:href="@{/addRecipe}" class="btn btn-primary">Add Recipe</a> <!-- Add Recipe button -->
     <a th:href="@{/home}">Back to Home</a>
 </body>
