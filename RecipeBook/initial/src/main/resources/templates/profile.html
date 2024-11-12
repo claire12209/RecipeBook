@@ -16,6 +16,11 @@
     <ul th:if="${folders != null}" th:each="folder : ${folders}">
         <li th:text="${folder.name}"></li>
     </ul>
+    
+    <!-- Error message display -->
+    <div th:if="${errorMessage}">
+        <p th:text="${errorMessage}" style="color: red;"></p>
+    </div>
     <form th:action="@{/folders/create}" method="post">
         <input type="text" name="folderName" placeholder="Enter Folder Name"/>
         <button type="submit">Create Folder</button>

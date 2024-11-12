@@ -22,13 +22,15 @@
     <form th:action="@{/recipesByCategory}" method="get">
         <label for="category">Filter by Category:</label>
         <select id="category" name="categoryId">
-            <option value="">Select Category</option>
+            <option value="" th:text="'All'" th:if="${selectedCategoryId == null}">All</option>
             <option th:each="category : ${categories}" 
                     th:value="${category.id}" 
-                    th:text="${category.name}">Category</option>
+                    th:text="${category.name}"
+                    th:selected="${selectedCategoryId == category.id}">Category</option>
         </select>
         <button type="submit">Filter</button>
     </form>
+
 
     <h3>All Recipes</h3>
     <ul>

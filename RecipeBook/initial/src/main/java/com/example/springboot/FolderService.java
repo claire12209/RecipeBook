@@ -34,6 +34,7 @@ public class FolderService {
         newFolder.setUser(user);
 
         folderRepository.save(newFolder);
+        System.out.println("Folder created successfully.");
         return "Folder created successfully.";
     }
 

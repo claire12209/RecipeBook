@@ -23,12 +23,28 @@ public class FolderController {
     @PostMapping("/create")
     public ModelAndView createFolder(@RequestParam String folderName) {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-        String username = authentication.getName(); // Get logged in username
-        User user = userService.findByUsername(username); // Assuming you can fetch user by username
-
-        folderService.createFolder(user.getId(), folderName);
-        return new ModelAndView("redirect:/profile");  // Redirect to the profile page after folder creation
+        String username = authentication.getName();
+        User user = userService.findByUsername(username);
+    
+        // Call createFolder and capture the result message
+        // String result = folderService.createFolder(user.getId(), folderName);
+    
+        ModelAndView modelAndView = new ModelAndView("redirect:/profile");
+    
+        // If folder creation failed, redirect with an error message
+        try {
+            String result = folderService.createFolder(user.getId(), folderName);
+            if (!"Folder created successfully.".equals(result)) {
+                modelAndView.addObject("errorMessage", result);
+            }
+        } catch (Exception e) {
+            modelAndView.addObject("errorMessage", "An unexpected error occurred: " + e.getMessage());
+            e.printStackTrace(); // Print the stack trace to the console
+        }
+    
+        return modelAndView;
     }
+    
 
     // Endpoint to get all folders by user ID
     @GetMapping("/user")
