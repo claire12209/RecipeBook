@@ -9,7 +9,6 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import com.example.springboot.User;
-
 import java.util.List;
 
 @Controller
@@ -21,7 +20,7 @@ public class HomeController {
     @Autowired
     private CategoryRepository categoryRepository;
 
-    // Home method to display recipes or search results
+    // Home method to display recipes or search results by name or category
     @GetMapping("/home")
     public String home(Model model, @RequestParam(value = "query", required = false) String query) {
         List<Recipe> recipes;
@@ -35,6 +34,19 @@ public class HomeController {
         List<Category> categories = categoryRepository.findAll();
         model.addAttribute("recipes", recipes);
         model.addAttribute("categories", categories);  // Pass categories to the view for the dropdown
+        return "home";
+    }
+
+    // Method to handle searching by ingredient specifically
+    @GetMapping("/search")
+    public String searchRecipesByIngredient(@RequestParam("query") String query, Model model) {
+        List<Recipe> recipes = recipeRepository.findByIngredient(query); // Using the custom query here
+        
+        List<Category> categories = categoryRepository.findAll();
+        model.addAttribute("recipes", recipes);
+        model.addAttribute("categories", categories);
+        model.addAttribute("query", query);
+
         return "home";
     }
 
@@ -95,4 +107,3 @@ public class HomeController {
         return "redirect:/profile"; // Redirect to profile page after saving
     }
 }
-
