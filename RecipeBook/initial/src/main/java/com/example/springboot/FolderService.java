@@ -39,9 +39,6 @@ public class FolderService {
 
     // Method to get all folders for a user
     public List<Folder> getAllFoldersByUser(Long userId) {
-        return folderRepository.findAll()
-                .stream()
-                .filter(folder -> folder.getUser().getId().equals(userId))
-                .toList();
+        return folderRepository.findByUserId(userId);
     }
 }

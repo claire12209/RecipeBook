@@ -16,7 +16,7 @@
     <ul th:if="${folders != null}" th:each="folder : ${folders}">
         <li th:text="${folder.name}"></li>
     </ul>
-    <form th:action="@{/createFolder}" method="post">
+    <form th:action="@{/folders/create}" method="post">
         <input type="text" name="folderName" placeholder="Enter Folder Name"/>
         <button type="submit">Create Folder</button>
     </form>
