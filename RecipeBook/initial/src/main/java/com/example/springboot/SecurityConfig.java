@@ -6,6 +6,7 @@ import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
+import org.springframework.security.web.csrf.CookieCsrfTokenRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 
 @org.springframework.context.annotation.Configuration
@@ -19,7 +20,7 @@ public class SecurityConfig {
         http
             .authorizeHttpRequests(authorizeRequests ->
                 authorizeRequests
-                    .requestMatchers("/register", "/register/**", "/home" ).permitAll()  // Permit access to home, register page
+                    .requestMatchers("/register", "/register/**", "/home").permitAll()  // Permit access to home, register page
                     .anyRequest().authenticated()  // All other pages require authentication
             )
             .formLogin(form -> form
@@ -29,6 +30,10 @@ public class SecurityConfig {
             )
             .logout(logout -> logout
                 .permitAll()
+                .logoutSuccessUrl("/home") // Redirect to home after logout
+            )
+            .csrf(csrf -> csrf
+                .csrfTokenRepository(CookieCsrfTokenRepository.withHttpOnlyFalse())  // Use cookies for CSRF tokens
             );
 
         return http.build();
@@ -39,4 +44,3 @@ public class SecurityConfig {
         return new BCryptPasswordEncoder();
     }
 }
-

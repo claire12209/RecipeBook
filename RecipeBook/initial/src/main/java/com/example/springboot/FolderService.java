@@ -42,4 +42,10 @@ public class FolderService {
     public List<Folder> getAllFoldersByUser(Long userId) {
         return folderRepository.findByUserId(userId);
     }
+
+    //deletion of a folder in profile
+    public void deleteFolderById(Long folderId) {
+        folderRepository.deleteById(folderId);
+    }
+    
 }

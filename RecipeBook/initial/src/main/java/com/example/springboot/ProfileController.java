@@ -6,6 +6,9 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import java.util.List;
 
@@ -31,4 +34,17 @@ public class ProfileController {
 
         return "profile"; // Ensure profile.html is set to use these attributes
     }
+
+    @PostMapping("/profile/delete/{id}")
+    public String deleteFolder(@PathVariable("id") Long folderId, RedirectAttributes redirectAttributes) {
+        try {
+            folderService.deleteFolderById(folderId);
+            redirectAttributes.addFlashAttribute("successMessage", "Folder deleted successfully!");
+        } catch (Exception e) {
+            redirectAttributes.addFlashAttribute("errorMessage", "Error deleting folder.");
+        }
+        return "redirect:/profile";
+    }
+
+
 }

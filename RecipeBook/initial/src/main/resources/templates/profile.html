@@ -14,8 +14,17 @@
     
     <h3>Your Folders</h3>
     <ul th:if="${folders != null}" th:each="folder : ${folders}">
-        <li th:text="${folder.name}"></li>
+        <li>
+            <span th:text="${folder.name}"></span> <!-- Display the folder name -->
+            <!-- Delete button for each folder, now including CSRF token -->
+            <form th:action="@{/profile/delete/{id}(id=${folder.id})}" method="post">
+                <input type="hidden" th:name="${_csrf.parameterName}" th:value="${_csrf.token}"/>
+                <button type="submit">Delete</button>
+            </form>
+        </li>
     </ul>
+    
+
     
     <!-- Error message display -->
     <div th:if="${errorMessage}">
