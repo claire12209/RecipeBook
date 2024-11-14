@@ -51,24 +51,24 @@ public class HomeController {
     }
 
    // Method to display recipes by selected category or show all recipes if "All" is selected
-@GetMapping("/recipesByCategory")
-public String recipesByCategory(@RequestParam(value = "categoryId", required = false) Long categoryId, Model model) {
-    List<Recipe> recipes;
+    @GetMapping("/recipesByCategory")
+    public String recipesByCategory(@RequestParam(value = "categoryId", required = false) Long categoryId, Model model) {
+        List<Recipe> recipes;
 
-    if (categoryId == null) {
-        // If "All" is selected, retrieve all recipes
-        recipes = recipeRepository.findAll();
-    } else {
-        // Otherwise, filter by the selected category ID
-        recipes = recipeRepository.findByCategory_Id(categoryId);
+        if (categoryId == null) {
+            // If "All" is selected, retrieve all recipes
+            recipes = recipeRepository.findAll();
+        } else {
+            // Otherwise, filter by the selected category ID
+            recipes = recipeRepository.findByCategory_Id(categoryId);
+        }
+
+        List<Category> categories = categoryRepository.findAll();
+        model.addAttribute("recipes", recipes);
+        model.addAttribute("categories", categories);
+        model.addAttribute("selectedCategoryId", categoryId);  // To show the selected category in the dropdown
+        return "home";
     }
-
-    List<Category> categories = categoryRepository.findAll();
-    model.addAttribute("recipes", recipes);
-    model.addAttribute("categories", categories);
-    model.addAttribute("selectedCategoryId", categoryId);  // To show the selected category in the dropdown
-    return "home";
-}
 
 
     // Method to display a single recipe's details
