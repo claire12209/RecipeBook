@@ -12,7 +12,7 @@
     </p>
 
     <!-- Search Form -->
-    <form th:action="@{/search}" method="get">
+    <form th:action="@{/home}" method="get">
         <label for="search">Search Recipes:</label>
         <input type="text" id="search" name="query" placeholder="Search by name or ingredient">
         <button type="submit">Search</button>
@@ -32,12 +32,16 @@
 
     <h3>All Recipes</h3>
     <ul>
+        <!-- Loop through the recipes and display their name and average rating -->
         <th:block th:each="recipe : ${recipes}">
             <li>
                 <a th:href="@{/recipe/{id}(id=${recipe.id})}" th:text="${recipe.name}">Recipe Title (ID: ${recipe.id})</a>
+                <!-- Display the average rating for the recipe -->
+                <p>Average Rating: <span th:text="${recipe.averageRating}">0</span></p>
             </li>
         </th:block>
     </ul>
 </body>
 </html>
+
 

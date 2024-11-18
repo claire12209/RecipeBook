@@ -9,6 +9,9 @@ import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ElementCollection;
 import jakarta.persistence.Table;
 import java.util.List;
+import jakarta.persistence.OneToMany;
+import java.util.ArrayList;
+
 
 @Entity
 @Table(name = "recipes")
@@ -33,7 +36,28 @@ public class Recipe {
     @JoinColumn(name = "user_id")  // Ensure the correct foreign key for user
     private User user;  // Relationship to the User entity
 
+    private Double averageRating;
+
+    @OneToMany(mappedBy = "recipe")
+    private List<RecipeRating> ratings = new ArrayList<>();
+
     // Getters and setters
+    public Double getAverageRating() {
+        return averageRating;
+    }
+
+    public void setAverageRating(Double averageRating) {
+        this.averageRating = averageRating;
+    }
+
+    public List<RecipeRating> getRatings() {
+        return ratings;
+    }
+
+    public void setRatings(List<RecipeRating> ratings) {
+        this.ratings = ratings;
+    }
+
     public User getUser() {
         return user;
     }

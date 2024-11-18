@@ -8,7 +8,7 @@
 
     <p>Added by: 
         <span th:text="${recipe.user != null ? recipe.user.username : 'Unknown'}">Username</span>
-    </p> <!-- Show added user -->
+    </p>
 
     <h2>Ingredients</h2>
     <ol>
@@ -23,6 +23,14 @@
             <li th:text="${step}">Step</li>
         </th:block>
     </ol>
+
+    <h3>Average Rating: <span th:text="${recipe.averageRating}">0</span></h3>
+
+    <form th:action="@{/recipe/{id}/rate(id=${recipe.id})}" method="post">
+        <label for="rating">Rate this recipe:</label>
+        <input type="number" id="rating" name="rating" min="1" max="5" required/>
+        <button type="submit">Submit Rating</button>
+    </form>
 
     <a href="/home">Back to Home</a>
 </body>

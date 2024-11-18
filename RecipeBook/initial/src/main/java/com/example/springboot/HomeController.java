@@ -8,8 +8,8 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
-import com.example.springboot.User;
-
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
+import org.springframework.security.core.Authentication;
 import java.util.List;
 
 @Controller
@@ -21,46 +21,92 @@ public class HomeController {
     @Autowired
     private CategoryRepository categoryRepository;
 
-    // Home method to display recipes or search results
+    @Autowired
+    private RecipeRatingRepository recipeRatingRepository;
+
+    @Autowired
+    private UserService userService;
+
     @GetMapping("/home")
     public String home(Model model, @RequestParam(value = "query", required = false) String query) {
         List<Recipe> recipes;
-
+    
         if (query != null && !query.isEmpty()) {
-            recipes = recipeRepository.findByNameContainingIgnoreCaseOrCategory_NameContainingIgnoreCase(query, query);
+            recipes = recipeRepository.findByNameContainingIgnoreCaseOrCategory_NameContainingIgnoreCaseOrIngredientsContainingIgnoreCase(query, query, query);
         } else {
             recipes = recipeRepository.findAll();
         }
 
+        // Calculate and set the average rating for each recipe
+        for (Recipe recipe : recipes) {
+            Double average = recipeRatingRepository.findAverageRatingByRecipeId(recipe.getId());
+            recipe.setAverageRating(average != null ? average : 0.0);
+        }
+
         List<Category> categories = categoryRepository.findAll();
         model.addAttribute("recipes", recipes);
-        model.addAttribute("categories", categories);  // Pass categories to the view for the dropdown
+        model.addAttribute("categories", categories);
         return "home";
     }
 
-    // Method to display recipes by selected category
     @GetMapping("/recipesByCategory")
     public String recipesByCategory(@RequestParam("categoryId") Long categoryId, Model model) {
         List<Recipe> recipes = recipeRepository.findByCategory_Id(categoryId);
-        List<Category> categories = categoryRepository.findAll();
+
+        // Calculate and set the average rating for each recipe in the selected category
+        for (Recipe recipe : recipes) {
+            Double average = recipeRatingRepository.findAverageRatingByRecipeId(recipe.getId());
+            recipe.setAverageRating(average != null ? average : 0.0);
+        }
 
         model.addAttribute("recipes", recipes);
-        model.addAttribute("categories", categories);
-        model.addAttribute("selectedCategoryId", categoryId);  // To show the selected category in the dropdown
+        model.addAttribute("categories", categoryRepository.findAll());
+        model.addAttribute("selectedCategoryId", categoryId);
         return "home";
     }
 
-    // Method to display a single recipe's details
     @GetMapping("/recipe/{id}")
     public String showRecipeDetails(@PathVariable Long id, Model model) {
         Recipe recipe = recipeRepository.findById(id)
                 .orElseThrow(() -> new IllegalArgumentException("Invalid recipe ID: " + id));
-        
+
+        // Set the average rating before displaying
+        Double average = recipeRatingRepository.findAverageRatingByRecipeId(recipe.getId());
+        recipe.setAverageRating(average != null ? average : 0.0);
+
         model.addAttribute("recipe", recipe);
         return "recipeDetails";
     }
 
-    // Login method
+    @PostMapping("/recipe/{id}/rate")
+    public String rateRecipe(@PathVariable Long id, @RequestParam int rating, Authentication authentication, RedirectAttributes redirectAttributes) {
+        try {
+            // Fetch recipe and logged-in user
+            Recipe recipe = recipeRepository.findById(id).orElseThrow(() -> new RuntimeException("Recipe not found"));
+            String username = authentication.getName(); // Get logged-in username
+            User user = userService.findByUsername(username); // Fetch the User object
+            
+            if (user == null) {
+                throw new RuntimeException("User not authenticated");
+            }
+    
+            // Save the rating
+            RecipeRating recipeRating = new RecipeRating(recipe, user, rating);
+            recipeRatingRepository.save(recipeRating);
+    
+            // Recalculate and save the average rating
+            Double average = recipeRatingRepository.findAverageRatingByRecipeId(recipe.getId());
+            recipe.setAverageRating(average != null ? average : 0.0);
+            recipeRepository.save(recipe);
+    
+            return "redirect:/recipe/" + id;
+        } catch (Exception e) {
+            e.printStackTrace();
+            redirectAttributes.addFlashAttribute("error", "An error occurred while saving your rating.");
+            return "redirect:/recipe/" + id;
+        }
+    }
+
     @GetMapping("/login")
     public String login(@RequestParam(value = "error", required = false) String error) {
         if (error != null) {
@@ -69,30 +115,22 @@ public class HomeController {
         return "login";
     }
 
-    // Method to show the form for adding a new recipe
     @GetMapping("/addRecipe")
     public String showAddRecipeForm(Model model) {
-        List<Category> categories = categoryRepository.findAll();
-        model.addAttribute("categories", categories);
+        model.addAttribute("categories", categoryRepository.findAll());
         model.addAttribute("recipe", new Recipe());
         return "addRecipe";
     }
 
-    // Method to handle the form submission for adding a new recipe
     @PostMapping("/addRecipe")
     public String addRecipe(Recipe recipe, 
                             @RequestParam List<String> ingredients, 
                             @RequestParam List<String> instructions, 
                             @AuthenticationPrincipal User currentUser) {
-        
-        // Associate the logged-in user with the recipe
         recipe.setIngredients(ingredients);
         recipe.setSteps(instructions);
         recipe.setUser(currentUser); // Associate the user with the recipe
-        
-        // Save the recipe to the repository
         recipeRepository.save(recipe);
-        return "redirect:/profile"; // Redirect to profile page after saving
+        return "redirect:/profile";
     }
 }
-
