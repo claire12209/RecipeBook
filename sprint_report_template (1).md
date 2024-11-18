@@ -1,4 +1,4 @@
-# Sprint x Report 
+# Sprint 2 Report 
 Video Link: 
 ## What's New (User Facing)
  * Recipe Rating: Users can now rate recipes, with average ratings displayed on the home and recipe details pages.
