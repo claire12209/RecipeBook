@@ -45,24 +45,34 @@
                 <p>Average Rating: <span th:text="${recipe.averageRating}">0</span></p>
                 
                 <!-- Add a Share button -->
-                <button onclick="shareRecipe('http://localhost:8080/recipe/' + /*[[${recipe.id}]]*/ '')">Share</button>
+                <!-- <button onclick="shareRecipe('http://localhost:8080/recipe/' + /*[[${recipe.id}]]*/ '')">Share</button> -->
+                <button onclick="shareRecipe('http://localhost:8080/recipe/' + encodeURIComponent('[[${recipe.name}]]'), this)">Share</button>
+
+
             </li>
         </th:block>
     </ul>
 
     <script>
-        function shareRecipe(link) {
+        function shareRecipe(link, button) {
             // Copy the link to the clipboard
             navigator.clipboard.writeText(link)
                 .then(() => {
-                    alert("Link copied to clipboard: " + link);
+                    // Change button text to "Copied!"
+                    button.textContent = "Copied!";
+                    
+                    // Reset button text to "Share" after 2 seconds
+                    setTimeout(() => {
+                        button.textContent = "Share";
+                    }, 2000); // 2-second delay
                 })
                 .catch(err => {
                     console.error("Failed to copy link: ", err);
                     alert("Failed to copy the link. Please try again.");
                 });
         }
-    </script>    
+    </script>
+      
     
 </body>
 </html>
