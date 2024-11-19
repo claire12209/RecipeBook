@@ -23,16 +23,15 @@
     <form th:action="@{/home}" method="get">
         <label for="category">Filter by Category:</label>
         <select id="category" name="category">
-            <!-- Add the default option for "ALL" -->
-            <option value="ALL" th:selected="${category == 'ALL'}">ALL</option>
-            <!-- Loop through categories from the backend -->
+            <!-- Dynamically populate categories -->
             <option th:each="category : ${categories}" 
                     th:value="${category.name}" 
                     th:text="${category.name}" 
-                    th:selected="${category == category.name}">Category</option>
+                    th:selected="${category == category.name}"></option>
         </select>
         <button type="submit">Filter</button>
     </form>
+    
 
     <h3>All Recipes</h3>
     <ul>
