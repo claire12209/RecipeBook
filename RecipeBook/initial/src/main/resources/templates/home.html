@@ -23,12 +23,14 @@
     <form th:action="@{/home}" method="get">
         <label for="category">Filter by Category:</label>
         <select id="category" name="category">
-            <!-- Dynamically populate categories -->
+            <!-- Add the "ALL" option -->
+            <option value="ALL" th:selected="${category == 'ALL'}">ALL</option>
+            <!-- Loop through categories -->
             <option th:each="category : ${categories}" 
                     th:value="${category.name}" 
                     th:text="${category.name}" 
                     th:selected="${category == category.name}"></option>
-        </select>
+        </select>       
         <button type="submit">Filter</button>
     </form>
     

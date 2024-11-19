@@ -50,16 +50,16 @@ public class HomeController {
             recipe.setAverageRating(average != null ? average : 0.0);
         }
     
-        // Fetch all categories and add "ALL" dynamically if not already present
+        // Fetch all categories
         List<Category> categories = categoryRepository.findAll();
-        if (categories.stream().noneMatch(c -> "ALL".equalsIgnoreCase(c.getName()))) {
-            categories.add(0, new Category("ALL")); // Add "ALL" at the top
-        }
     
-        model.addAttribute("recipes", recipes);
+        // Add "ALL" as a string at the top of the categories
         model.addAttribute("categories", categories);
+        model.addAttribute("allOption", "ALL");
+        model.addAttribute("recipes", recipes);
         return "home";
     }
+    
      
     
 
