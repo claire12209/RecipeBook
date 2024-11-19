@@ -28,26 +28,36 @@ public class HomeController {
     private UserService userService;
 
     @GetMapping("/home")
-    public String home(Model model, @RequestParam(value = "query", required = false) String query) {
+    public String home(
+        Model model,
+        @RequestParam(value = "query", required = false) String query,
+        @RequestParam(value = "category", required = false) String category
+    ) {
         List<Recipe> recipes;
     
         if (query != null && !query.isEmpty()) {
             recipes = recipeRepository.findByNameContainingIgnoreCaseOrCategory_NameContainingIgnoreCaseOrIngredientsContainingIgnoreCase(query, query, query);
+        } else if (category != null && !category.equalsIgnoreCase("ALL")) {
+            recipes = recipeRepository.findByCategory_Name(category); // Fetch recipes by category
         } else {
-            recipes = recipeRepository.findAll();
+            recipes = recipeRepository.findAll(); // Fetch all recipes
         }
-
+    
         // Calculate and set the average rating for each recipe
         for (Recipe recipe : recipes) {
             Double average = recipeRatingRepository.findAverageRatingByRecipeId(recipe.getId());
             recipe.setAverageRating(average != null ? average : 0.0);
         }
-
+    
+        // Fetch all categories and add "ALL" dynamically
         List<Category> categories = categoryRepository.findAll();
+        categories.add(0, new Category("ALL")); // Add "ALL" at the top of the list
+    
         model.addAttribute("recipes", recipes);
         model.addAttribute("categories", categories);
         return "home";
     }
+    
 
     @GetMapping("/recipesByCategory")
     public String recipesByCategory(@RequestParam("categoryId") Long categoryId, Model model) {

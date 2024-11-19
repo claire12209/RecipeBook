@@ -14,18 +14,22 @@
     <!-- Search Form -->
     <form th:action="@{/home}" method="get">
         <label for="search">Search Recipes:</label>
-        <input type="text" id="search" name="query" placeholder="Search by name or ingredient">
+        <input type="text" id="search" name="query" placeholder="Search by name or ingredient"
+               th:value="${query}">
         <button type="submit">Search</button>
     </form>
 
-    <!-- Category Search Form -->
-    <form th:action="@{/recipesByCategory}" method="get">
+    <!-- Category Filter Form -->
+    <form th:action="@{/home}" method="get">
         <label for="category">Filter by Category:</label>
-        <select id="category" name="categoryId">
-            <option value="">Select Category</option>
+        <select id="category" name="category">
+            <!-- Add the default option for "ALL" -->
+            <option value="ALL" th:selected="${category == 'ALL'}">ALL</option>
+            <!-- Loop through categories from the backend -->
             <option th:each="category : ${categories}" 
-                    th:value="${category.id}" 
-                    th:text="${category.name}">Category</option>
+                    th:value="${category.name}" 
+                    th:text="${category.name}" 
+                    th:selected="${category == category.name}">Category</option>
         </select>
         <button type="submit">Filter</button>
     </form>
@@ -43,5 +47,3 @@
     </ul>
 </body>
 </html>
-
-
