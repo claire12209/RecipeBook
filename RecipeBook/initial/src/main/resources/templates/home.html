@@ -35,14 +35,34 @@
 
     <h3>All Recipes</h3>
     <ul>
-        <!-- Loop through the recipes and display their name and average rating -->
+        <!-- Loop through the recipes and display their name, average rating, and share button -->
         <th:block th:each="recipe : ${recipes}">
             <li>
+                <!-- Recipe name as a clickable link -->
                 <a th:href="@{/recipe/{id}(id=${recipe.id})}" th:text="${recipe.name}">Recipe Title (ID: ${recipe.id})</a>
+                
                 <!-- Display the average rating for the recipe -->
                 <p>Average Rating: <span th:text="${recipe.averageRating}">0</span></p>
+                
+                <!-- Add a Share button -->
+                <button onclick="shareRecipe('http://localhost:8080/recipe/' + /*[[${recipe.id}]]*/ '')">Share</button>
             </li>
         </th:block>
     </ul>
+
+    <script>
+        function shareRecipe(link) {
+            // Copy the link to the clipboard
+            navigator.clipboard.writeText(link)
+                .then(() => {
+                    alert("Link copied to clipboard: " + link);
+                })
+                .catch(err => {
+                    console.error("Failed to copy link: ", err);
+                    alert("Failed to copy the link. Please try again.");
+                });
+        }
+    </script>    
+    
 </body>
 </html>
