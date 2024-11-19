@@ -38,7 +38,9 @@ public class HomeController {
         if (query != null && !query.isEmpty()) {
             recipes = recipeRepository.findByNameContainingIgnoreCaseOrCategory_NameContainingIgnoreCaseOrIngredientsContainingIgnoreCase(query, query, query);
         } else if (category != null && !category.equalsIgnoreCase("ALL")) {
-            recipes = recipeRepository.findByCategory_Name(category); // Fetch recipes by category
+            // Find by category ID
+            Long categoryId = categoryRepository.findByName(category).getId(); // Get ID from category name
+            recipes = recipeRepository.findByCategory_Id(categoryId);
         } else {
             recipes = recipeRepository.findAll(); // Fetch all recipes
         }
@@ -57,6 +59,7 @@ public class HomeController {
         model.addAttribute("categories", categories);
         return "home";
     }
+    
     
 
     @GetMapping("/recipesByCategory")
