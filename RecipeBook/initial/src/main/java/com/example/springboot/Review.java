@@ -9,6 +9,8 @@ import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
+import jakarta.persistence.Transient;
+
 
 @Entity
 public class Review {
@@ -32,6 +34,18 @@ public class Review {
 
     @Column(nullable = false)
     private LocalDateTime date;
+
+    @Transient // Not persisted in the database
+    private String formattedDate;
+
+    // Getters and setters for the formatted date
+    public String getFormattedDate() {
+        return formattedDate;
+    }
+
+    public void setFormattedDate(String formattedDate) {
+        this.formattedDate = formattedDate;
+    }
     
     // Getters and setters
     public Long getId() {

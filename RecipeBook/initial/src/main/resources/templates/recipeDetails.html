@@ -47,7 +47,7 @@
             <p><strong>User:</strong> <span th:text="${review.user != null ? review.user.username : 'Anonymous'}"></span></p>
             <p><strong>Rating:</strong> <span th:text="${review.rating}"></span> / 5</p>
             <p><strong>Date:</strong> 
-               <span th:text="${review.date != null ? #dates.format(review.date, 'yyyy-MM-dd HH:mm') : 'N/A'}"></span>
+                <span th:text="${review.formattedDate != null ? review.formattedDate : 'N/A'}"></span>
             </p>
             <p><strong>Comment:</strong> <span th:text="${review.comment}"></span></p>
         </li>

@@ -1,5 +1,6 @@
 package com.example.springboot;
 
+import java.time.format.DateTimeFormatter;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -87,7 +88,15 @@ public class HomeController {
                 .orElseThrow(() -> new IllegalArgumentException("Invalid recipe ID: " + id));
     
         // Force initialization of the reviews list
-        recipe.getReviews().size(); // This will trigger the lazy-loading of reviews
+        recipe.getReviews().size(); // This will trigger the lazy-loading of reviews,Ensure reviews are loaded
+
+        // Format the review dates
+        for (Review review : recipe.getReviews()) {
+            if (review.getDate() != null) {
+                // Format the date as a string and set it in the review object
+                review.setFormattedDate(review.getDate().format(DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm")));
+            }
+        }
     
         // Calculate and set the average rating
         Double average = recipeRatingRepository.findAverageRatingByRecipeId(recipe.getId());
