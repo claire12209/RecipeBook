@@ -4,8 +4,6 @@ import java.security.Principal;
 import java.time.LocalDateTime;
 
 import org.springframework.stereotype.Controller;
-import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -27,14 +25,8 @@ public class RecipeController {
     }
 
     // Method to display the recipe details page
-    @GetMapping("/recipe/{id}")
-    public String getRecipeDetails(@PathVariable Long id, Model model) {
-        // Fetch the recipe along with its reviews
-        Recipe recipe = recipeService.findByIdWithReviews(id);
-        model.addAttribute("recipe", recipe);  // Add recipe to the model
-        model.addAttribute("reviews", recipe.getReviews());  // Add reviews to the model
-        return "recipeDetails";  // Return the Thymeleaf template for recipe details
-    }
+    //@GetMapping("/recipes/{id}") is in HomeController.java
+
 
     // Method to handle the submission of a new review
     @PostMapping("/recipe/{id}/addReview")

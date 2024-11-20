@@ -1,16 +1,17 @@
 package com.example.springboot;
 
+import java.util.List;
+
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
-import org.springframework.security.core.Authentication;
-import java.util.List;
 
 @Controller
 public class HomeController {
@@ -81,16 +82,23 @@ public class HomeController {
 
     @GetMapping("/recipe/{id}")
     public String showRecipeDetails(@PathVariable Long id, Model model) {
+        // Fetch the recipe by ID
         Recipe recipe = recipeRepository.findById(id)
                 .orElseThrow(() -> new IllegalArgumentException("Invalid recipe ID: " + id));
-
-        // Set the average rating before displaying
+    
+        // Calculate and set the average rating
         Double average = recipeRatingRepository.findAverageRatingByRecipeId(recipe.getId());
         recipe.setAverageRating(average != null ? average : 0.0);
-
+    
+        // Add recipe details to the model
         model.addAttribute("recipe", recipe);
-        return "recipeDetails";
+    
+        // Add reviews to the model
+        model.addAttribute("reviews", recipe.getReviews()); // Include reviews for the recipe
+    
+        return "recipeDetails"; // Render the recipeDetails.html page
     }
+    
 
     @PostMapping("/recipe/{id}/rate")
     public String rateRecipe(@PathVariable Long id, @RequestParam int rating, Authentication authentication, RedirectAttributes redirectAttributes) {
