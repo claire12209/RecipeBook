@@ -36,6 +36,18 @@
     <!-- Reviews Section -->
     <h3>Reviews</h3>
 
+        <!-- Filter links -->
+    <div>
+        <a th:href="@{/recipe/{id}(id=${recipe.id}, filter='all')}" 
+        th:classappend="${filter == 'all' ? 'active' : ''}">
+        All Reviews
+        </a>
+        |
+        <a th:href="@{/recipe/{id}(id=${recipe.id}, filter='recent')}" 
+        th:classappend="${filter == 'recent' ? 'active' : ''}">
+        Most Recent Reviews
+        </a>
+    </div>
     <!-- Check if there are any reviews -->
     <div th:if="${#lists.isEmpty(reviews)}">
         <p>No reviews yet. Be the first to review!</p>

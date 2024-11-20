@@ -1,6 +1,5 @@
 package com.example.springboot;
 
-import java.time.format.DateTimeFormatter;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -82,31 +81,50 @@ public class HomeController {
     }
 
     @GetMapping("/recipe/{id}")
-    public String showRecipeDetails(@PathVariable Long id, Model model) {
+    public String showRecipeDetails(
+        @PathVariable Long id,
+        @RequestParam(value = "filter", defaultValue = "all") String filter, // Add filter parameter
+        Model model
+    ) {
         // Fetch the recipe by ID
         Recipe recipe = recipeRepository.findById(id)
                 .orElseThrow(() -> new IllegalArgumentException("Invalid recipe ID: " + id));
     
         // Force initialization of the reviews list
-        recipe.getReviews().size(); // This will trigger the lazy-loading of reviews,Ensure reviews are loaded
+        // recipe.getReviews().size(); // Ensure reviews are loaded
 
-        // Format the review dates
-        for (Review review : recipe.getReviews()) {
-            if (review.getDate() != null) {
-                // Format the date as a string and set it in the review object
-                review.setFormattedDate(review.getDate().format(DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm")));
-            }
-        }
-    
+        // // Format the review dates
+        // for (Review review : recipe.getReviews()) {
+        //     if (review.getDate() != null) {
+        //         // Format the date as a string and set it in the review object
+        //         review.setFormattedDate(review.getDate().format(DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm")));
+        //     }
+        // }
         // Calculate and set the average rating
         Double average = recipeRatingRepository.findAverageRatingByRecipeId(recipe.getId());
         recipe.setAverageRating(average != null ? average : 0.0);
+        // Filter reviews based on the query parameter
+        List<Review> reviews;
+        if ("recent".equalsIgnoreCase(filter)) {
+            reviews = recipe.getReviews().stream()
+                            .sorted((r1, r2) -> r2.getDate().compareTo(r1.getDate())) // Sort by date descending
+                            .limit(5) // Limit to the most recent 5 reviews (adjust as needed)
+                            .toList();
+        } else {
+            reviews = recipe.getReviews(); // Show all reviews
+        }
+    
+        // // Calculate and set the average rating
+        // Double average = recipeRatingRepository.findAverageRatingByRecipeId(recipe.getId());
+        // recipe.setAverageRating(average != null ? average : 0.0);
     
         // Add recipe details to the model
         model.addAttribute("recipe", recipe);
     
         // Add reviews to the model
         model.addAttribute("reviews", recipe.getReviews());
+
+        model.addAttribute("filter", filter);
     
         return "recipeDetails";
     }
