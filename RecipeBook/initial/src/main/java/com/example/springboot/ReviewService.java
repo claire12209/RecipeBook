@@ -1,13 +1,14 @@
 package com.example.springboot.service;
 
-import com.example.springboot.Review;
-import com.example.springboot.Recipe;
-import com.example.springboot.User;
-import com.example.springboot.ReviewRepository;
-import com.example.springboot.RecipeRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Service;
+
+import com.example.springboot.Recipe;
+import com.example.springboot.RecipeRepository;
+import com.example.springboot.Review;
+import com.example.springboot.ReviewRepository;
+import com.example.springboot.User;
 
 @Service
 public class ReviewService {
@@ -40,5 +41,10 @@ public class ReviewService {
         }
 
         reviewRepository.save(review); // Save the review to the database
+    }
+
+    // New generic save method
+    public void save(Review review) {
+        reviewRepository.save(review);
     }
 }

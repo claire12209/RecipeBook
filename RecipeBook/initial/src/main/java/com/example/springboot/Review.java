@@ -1,12 +1,14 @@
 package com.example.springboot;
 
+import java.time.LocalDateTime;
+
+import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
-import jakarta.persistence.Id;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
-import jakarta.persistence.ManyToOne;
+import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
-import jakarta.persistence.Column;
+import jakarta.persistence.ManyToOne;
 
 @Entity
 public class Review {
@@ -25,6 +27,10 @@ public class Review {
 
     @Column(length = 500)
     private String comment;
+
+    private int rating; // Rating (1 to 5)
+
+    private LocalDateTime date; // Timestamp for the review
 
     // Getters and setters
     public Long getId() {
@@ -58,5 +64,20 @@ public class Review {
     public void setComment(String comment) {
         this.comment = comment;
     }
-}
 
+    public int getRating() {
+        return rating;
+    }
+
+    public void setRating(int rating) {
+        this.rating = rating;
+    }
+
+    public LocalDateTime getDate() {
+        return date;
+    }
+
+    public void setDate(LocalDateTime date) {
+        this.date = date;
+    }
+}

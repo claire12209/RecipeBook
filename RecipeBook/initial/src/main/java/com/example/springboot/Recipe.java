@@ -1,17 +1,17 @@
 package com.example.springboot;
 
+import java.util.ArrayList;
+import java.util.List;
+
+import jakarta.persistence.ElementCollection;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
-import jakarta.persistence.ManyToOne;
 import jakarta.persistence.JoinColumn;
-import jakarta.persistence.ElementCollection;
-import jakarta.persistence.Table;
-import java.util.List;
+import jakarta.persistence.ManyToOne;
 import jakarta.persistence.OneToMany;
-import java.util.ArrayList;
-
+import jakarta.persistence.Table;
 
 @Entity
 @Table(name = "recipes")
@@ -41,7 +41,19 @@ public class Recipe {
     @OneToMany(mappedBy = "recipe")
     private List<RecipeRating> ratings = new ArrayList<>();
 
+    // New addition: One-to-Many relationship with Review
+    @OneToMany(mappedBy = "recipe", cascade = jakarta.persistence.CascadeType.ALL, fetch = jakarta.persistence.FetchType.LAZY)
+    private List<Review> reviews = new ArrayList<>();
+
     // Getters and setters
+    public List<Review> getReviews() {
+        return reviews;
+    }
+
+    public void setReviews(List<Review> reviews) {
+        this.reviews = reviews;
+    }
+
     public Double getAverageRating() {
         return averageRating;
     }
