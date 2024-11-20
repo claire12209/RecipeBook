@@ -86,6 +86,9 @@ public class HomeController {
         Recipe recipe = recipeRepository.findById(id)
                 .orElseThrow(() -> new IllegalArgumentException("Invalid recipe ID: " + id));
     
+        // Force initialization of the reviews list
+        recipe.getReviews().size(); // This will trigger the lazy-loading of reviews
+    
         // Calculate and set the average rating
         Double average = recipeRatingRepository.findAverageRatingByRecipeId(recipe.getId());
         recipe.setAverageRating(average != null ? average : 0.0);
@@ -94,10 +97,11 @@ public class HomeController {
         model.addAttribute("recipe", recipe);
     
         // Add reviews to the model
-        model.addAttribute("reviews", recipe.getReviews()); // Include reviews for the recipe
+        model.addAttribute("reviews", recipe.getReviews());
     
-        return "recipeDetails"; // Render the recipeDetails.html page
+        return "recipeDetails";
     }
+    
     
 
     @PostMapping("/recipe/{id}/rate")

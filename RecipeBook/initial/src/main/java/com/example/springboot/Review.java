@@ -30,8 +30,9 @@ public class Review {
 
     private int rating; // Rating (1 to 5)
 
-    private LocalDateTime date; // Timestamp for the review
-
+    @Column(nullable = false)
+    private LocalDateTime date;
+    
     // Getters and setters
     public Long getId() {
         return id;
