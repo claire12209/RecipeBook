@@ -22,4 +22,9 @@ public class RecipeService {
         // If you added the custom query to fetch recipes with reviews
         return recipeRepository.findByIdWithReviews(id);
     }
+    
+    public void save(Recipe recipe) {
+        recipeRepository.save(recipe);
+    }
+    
 }
