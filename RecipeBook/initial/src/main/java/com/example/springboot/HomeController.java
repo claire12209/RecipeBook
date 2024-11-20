@@ -1,5 +1,6 @@
 package com.example.springboot;
 
+import java.time.format.DateTimeFormatter;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -93,16 +94,10 @@ public class HomeController {
         // Force initialization of the reviews list
         recipe.getReviews().size(); // Ensure reviews are loaded
 
-        // // Format the review dates
-        // for (Review review : recipe.getReviews()) {
-        //     if (review.getDate() != null) {
-        //         // Format the date as a string and set it in the review object
-        //         review.setFormattedDate(review.getDate().format(DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm")));
-        //     }
-        // }
         // Calculate and set the average rating
         Double average = recipeRatingRepository.findAverageRatingByRecipeId(recipe.getId());
         recipe.setAverageRating(average != null ? average : 0.0);
+
         // Filter reviews based on the query parameter
         List<Review> reviews;
         if ("recent".equalsIgnoreCase(filter)) {
@@ -113,16 +108,22 @@ public class HomeController {
         } else {
             reviews = recipe.getReviews(); // Show all reviews
         }
-    
-        // // Calculate and set the average rating
-        // Double average = recipeRatingRepository.findAverageRatingByRecipeId(recipe.getId());
-        // recipe.setAverageRating(average != null ? average : 0.0);
+
+        // Format the review dates for Thymeleaf
+        reviews.forEach(review -> {
+            if (review.getDate() != null) {
+                review.setFormattedDate(review.getDate().format(DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm")));
+            }
+        });
     
         // Add recipe details to the model
         model.addAttribute("recipe", recipe);
     
         // Add reviews to the model
         model.addAttribute("reviews", recipe.getReviews());
+
+        // // Add filtered reviews to the model
+        // model.addAttribute("reviews", reviews);
 
         model.addAttribute("filter", filter);
     
