@@ -1,16 +1,13 @@
 package com.example.springboot;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
+import org.springframework.security.authentication.AuthenticationManager;
+import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
-import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
-import org.springframework.security.authentication.AuthenticationManager;
-
-
 
 @org.springframework.context.annotation.Configuration
 public class SecurityConfig {
@@ -23,8 +20,8 @@ public class SecurityConfig {
         http
             .authorizeHttpRequests(authorizeRequests ->
                 authorizeRequests
-                    .requestMatchers("/register", "/register/**", "/home" ).permitAll()  // Permit access to home, register page
-                    .anyRequest().authenticated()  // All other pages require authentication
+                    .requestMatchers("/register", "/register/**", "/home", "/recipe/**").permitAll() // Allow access to home and recipe details
+                    .anyRequest().authenticated()  // Require authentication for all other pages
             )
             .formLogin(form -> form
                 .loginPage("/login")
@@ -52,4 +49,3 @@ public class SecurityConfig {
         return authenticationManagerBuilder.build();
     }
 }
-

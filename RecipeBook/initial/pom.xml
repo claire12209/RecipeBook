@@ -67,6 +67,13 @@
             <artifactId>mysql-connector-j</artifactId>
             <version>8.0.32</version> 
         </dependency> 
+
+        <dependency>
+            <groupId>org.thymeleaf.extras</groupId>
+            <artifactId>thymeleaf-extras-springsecurity6</artifactId>
+            <version>3.1.1</version> <!-- Adjust this version as needed -->
+        </dependency>
+
     </dependencies>
 
     <build>
