@@ -1,11 +1,11 @@
 package com.example.springboot;
 
+import java.util.List;
+
 import org.springframework.data.jpa.repository.JpaRepository;
-import org.springframework.stereotype.Repository;
-import com.example.springboot.RecipeRating;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
-import java.util.List;
+import org.springframework.stereotype.Repository;
 
 @Repository
 public interface RecipeRatingRepository extends JpaRepository<RecipeRating, Long> {

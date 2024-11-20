@@ -1,14 +1,10 @@
-package com.example.springboot.service;
+package com.example.springboot; // Correcting the package declaration to match your project structure
+
+import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Service;
-
-import com.example.springboot.Recipe;
-import com.example.springboot.RecipeRepository;
-import com.example.springboot.Review;
-import com.example.springboot.ReviewRepository;
-import com.example.springboot.User;
 
 @Service
 public class ReviewService {
@@ -22,29 +18,36 @@ public class ReviewService {
         this.recipeRepository = recipeRepository;
     }
 
+    // Add a review to a recipe
     public void addReview(String comment, Long recipeId, Authentication authentication) {
-        // Get the current user or allow for null
+        // Get the currently logged-in user, or allow null if not authenticated
         User currentUser = (authentication != null) ? (User) authentication.getPrincipal() : null;
 
-        // Find the recipe by ID
+        // Find the recipe by its ID
         Recipe recipe = recipeRepository.findById(recipeId)
             .orElseThrow(() -> new RuntimeException("Recipe not found"));
 
-        // Create and save the review
+        // Create and populate the review
         Review review = new Review();
         review.setComment(comment);
         review.setRecipe(recipe);
-        
-        // Set the user only if it's not null (for logged-in users)
+
+        // Set the user only if it's not null
         if (currentUser != null) {
             review.setUser(currentUser);
         }
 
-        reviewRepository.save(review); // Save the review to the database
+        // Save the review to the database
+        reviewRepository.save(review);
     }
 
-    // New generic save method
+    // Save a review directly (generic method)
     public void save(Review review) {
         reviewRepository.save(review);
+    }
+
+    // Optional method to fetch reviews by recipe
+    public Optional<Review> findById(Long id) {
+        return reviewRepository.findById(id);
     }
 }
