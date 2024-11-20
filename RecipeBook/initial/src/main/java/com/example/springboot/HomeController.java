@@ -91,7 +91,7 @@ public class HomeController {
                 .orElseThrow(() -> new IllegalArgumentException("Invalid recipe ID: " + id));
     
         // Force initialization of the reviews list
-        // recipe.getReviews().size(); // Ensure reviews are loaded
+        recipe.getReviews().size(); // Ensure reviews are loaded
 
         // // Format the review dates
         // for (Review review : recipe.getReviews()) {
