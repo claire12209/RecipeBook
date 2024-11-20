@@ -47,10 +47,8 @@
                 <p>Average Rating: <span th:text="${recipe.averageRating}">0</span></p>
                 
                 <!-- Add a Share button -->
-                <!-- <button onclick="shareRecipe('http://localhost:8080/recipe/' + /*[[${recipe.id}]]*/ '')">Share</button> -->
-                <!-- <button onclick="shareRecipe('http://localhost:8080/recipe/' + encodeURIComponent('[[${recipe.name}]]'), this)">Share</button> -->
-                <!-- <button onclick="shareRecipe('http://localhost:8080/recipe/' + [[${#strings.urlEncode(recipe.name)}]], this)">Share</button> -->
-                <button onclick="shareRecipe('http://localhost:8080/recipe/' + /*[[${#strings.urlEncode(recipe.name)}]]*/, this)">Share</button>
+                <button onclick="shareRecipe('http://localhost:8080/recipe/' + [[${recipe.id}]], this)">
+                    Share</button>
             </li>
         </th:block>
     </ul>
