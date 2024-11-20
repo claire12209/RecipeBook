@@ -32,6 +32,24 @@
         <button type="submit">Submit Rating</button>
     </form>
 
+    <!-- Reviews Section -->
+    <h3>Reviews</h3>
+
+    <!-- Check if there are any reviews -->
+    <div th:if="${#lists.isEmpty(reviews)}">
+        <p>No reviews yet. Be the first to review!</p>
+    </div>
+
+    <!-- Display reviews -->
+    <ul th:if="${!#lists.isEmpty(reviews)}" th:each="review : ${reviews}">
+        <li>
+            <p><strong>User:</strong> <span th:text="${review.user != null ? review.user.username : 'Anonymous'}"></span></p>
+            <p><strong>Rating:</strong> <span th:text="${review.rating}"></span> / 5</p>
+            <p><strong>Date:</strong> <span th:text="${#dates.format(review.date, 'yyyy-MM-dd HH:mm')}"></span></p>
+            <p><strong>Comment:</strong> <span th:text="${review.comment}"></span></p>
+        </li>
+    </ul>
+
     <a href="/home">Back to Home</a>
 </body>
 </html>
