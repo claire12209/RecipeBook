@@ -39,6 +39,42 @@
     <div th:if="${#lists.isEmpty(reviews)}">
         <p>No reviews yet. Be the first to review!</p>
     </div>
+    
+    <!-- Display reviews -->
+    <ul th:if="${!#lists.isEmpty(reviews)}" th:each="review : ${reviews}">
+        <li>
+            <p><strong>User:</strong> <span th:text="${review.user != null ? review.user.username : 'Anonymous'}"></span></p>
+            <p><strong>Rating:</strong> <span th:text="${review.rating}"></span> / 5</p>
+            <p><strong>Date:</strong> <span th:text="${#dates.format(review.date, 'yyyy-MM-dd HH:mm')}"></span></p>
+            <p><strong>Comment:</strong> <span th:text="${review.comment}"></span></p>
+        </li>
+    </ul>
+    
+    <!-- Form for Adding a Review -->
+    <div th:if="${#authentication.name != 'anonymousUser'}">
+        <h3>Add a Review</h3>
+        <form th:action="@{/recipe/{id}/addReview(id=${recipe.id})}" method="post">
+            <label for="rating">Rating (1-5):</label>
+            <input type="number" id="rating" name="rating" min="1" max="5" required />
+            <br />
+            <label for="comment">Comment:</label>
+            <textarea id="comment" name="comment" rows="4" cols="50" required></textarea>
+            <br />
+            <button type="submit">Post Review</button>
+        </form>
+    </div>
+    
+    <!-- Show login prompt if user is not logged in -->
+    <div th:if="${#authentication.name == 'anonymousUser'}">
+        <p><strong>You must be logged in to leave a review.</strong></p>
+        <a href="/login">Login</a>
+    </div>
+    
+
+    <!-- Check if there are any reviews -->
+    <div th:if="${#lists.isEmpty(reviews)}">
+        <p>No reviews yet. Be the first to review!</p>
+    </div>
 
     <!-- Display reviews -->
     <ul th:if="${!#lists.isEmpty(reviews)}" th:each="review : ${reviews}">
