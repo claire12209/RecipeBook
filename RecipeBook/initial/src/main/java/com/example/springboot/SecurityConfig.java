@@ -20,8 +20,9 @@ public class SecurityConfig {
         http
             .authorizeHttpRequests(authorizeRequests ->
                 authorizeRequests
-                    .requestMatchers("/register", "/register/**", "/home", "/recipe/**").permitAll() // Allow access to home and recipe details
-                    .anyRequest().authenticated()  // Require authentication for all other pages
+                .requestMatchers("/register", "/register/**", "/home", "/home/**","/category", "/category/**" ).permitAll()  // Permit access to home, register page
+                .requestMatchers("/resources/**","/templates/**", "/static/**", "/css/**", "/js/**", "/images/**", "/icon/**").permitAll()
+                 .anyRequest().authenticated()  // All other pages require authentication
             )
             .formLogin(form -> form
                 .loginPage("/login")

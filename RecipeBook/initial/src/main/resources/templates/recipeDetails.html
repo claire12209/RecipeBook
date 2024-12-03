@@ -1,91 +1,49 @@
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org">
+<link rel="stylesheet" th:href="@{/css/Style.css}">
 <head>
     <title>Recipe Details</title>
 </head>
 <body>
-    <h1 th:text="${recipe.name}">Recipe Name</h1>
+    <div class="TopBanner">
+        <p><a th:href="@{/login}">Login</a></p>
+        <p style="font-size:larger;"><a th:href="@{/home}">Recipe Book</a></p>
+        <p style="margin-right: 30%;"><a th:href="@{/register}">Register</a></p>
+        <p><a th:href="@{/profile}">Your Profile</a></p>
 
-    <p>Added by: 
+    </div>
+    <h2 th:text="${recipe.name}">Recipe Name</h2>
+
+    <p style="text-align:center; font-style:italic; color: #a7556a" >Added by: 
         <span th:text="${recipe.user != null ? recipe.user.username : 'Unknown'}">Username</span>
-    </p>
+    </p> <!-- Show added user -->
 
-    <h2>Ingredients</h2>
-    <ol>
-        <th:block th:each="ingredient : ${recipe.ingredients}">
-            <li th:text="${ingredient}">Ingredient</li>
-        </th:block>
-    </ol>
+    <h1>Ingredients</h1>
+    
+        <ol class="stepsAndIngredients">
+            <th:block th:each="ingredient : ${recipe.ingredients}">
+                <li th:text="${ingredient}">Ingredient</li>
+            </th:block>
+        </ol>
+  
 
-    <h2>Steps</h2>
-    <ol>
+    <h1>Steps</h1>
+    <ol class="stepsAndIngredients">
         <th:block th:each="step : ${recipe.steps}">
             <li th:text="${step}">Step</li>
         </th:block>
     </ol>
+    <h1>Average Rating: <span th:text="${recipe.averageRating}">0</span></h1>
 
-    <h3>Average Rating: <span th:text="${recipe.averageRating}">0</span></h3>
-
-    <!-- Form for Rating the Recipe -->
-    <form th:action="@{/recipe/{id}/rate(id=${recipe.id})}" method="post">
+    <form th:action="@{/recipe/{id}/rate(id=${recipe.id})}" method="post" style="text-align:center; font-style:italic; color: #a7556a">
         <label for="rating">Rate this recipe:</label>
         <input type="number" id="rating" name="rating" min="1" max="5" required/>
+        <div class="addButton" style="align-items: center; display: flex; flex-direction: column;">
         <button type="submit">Submit Rating</button>
+    </div>
     </form>
 
-    <!-- Reviews Section -->
-    <h3>Reviews</h3>
 
-        <!-- Filter links -->
-    <div>
-        <a th:href="@{/recipe/{id}(id=${recipe.id}, filter='all')}" 
-        th:classappend="${filter == 'all' ? 'active' : ''}">
-        All Reviews
-        </a>
-        |
-        <a th:href="@{/recipe/{id}(id=${recipe.id}, filter='recent')}" 
-        th:classappend="${filter == 'recent' ? 'active' : ''}">
-        Most Recent Reviews
-        </a>
-    </div>
-    <!-- Check if there are any reviews -->
-    <div th:if="${#lists.isEmpty(reviews)}">
-        <p>No reviews yet. Be the first to review!</p>
-    </div>
-
-    <!-- Display reviews -->
-    <ul th:if="${!#lists.isEmpty(reviews)}" th:each="review : ${reviews}">
-        <li>
-            <p><strong>User:</strong> <span th:text="${review.user != null ? review.user.username : 'Anonymous'}"></span></p>
-            <p><strong>Rating:</strong> <span th:text="${review.rating}"></span> / 5</p>
-            <p><strong>Date:</strong> 
-                <span th:text="${review.formattedDate != null ? review.formattedDate : 'N/A'}"></span>
-            </p>
-            <p><strong>Comment:</strong> <span th:text="${review.comment}"></span></p>
-        </li>
-    </ul>
-    
-
-    <!-- Form for Adding a Review -->
-    <div th:if="${#authentication.name != 'anonymousUser'}">
-        <h3>Add a Review</h3>
-        <form th:action="@{/recipe/{id}/addReview(id=${recipe.id})}" method="post">
-            <label for="rating">Rating (1-5):</label>
-            <input type="number" id="rating" name="rating" min="1" max="5" required />
-            <br />
-            <label for="comment">Comment:</label>
-            <textarea id="comment" name="comment" rows="4" cols="50" required></textarea>
-            <br />
-            <button type="submit">Post Review</button>
-        </form>
-    </div>
-
-    <!-- Show login prompt if user is not logged in -->
-    <div th:if="${#authentication.name == 'anonymousUser'}">
-        <p><strong>You must be logged in to leave a review.</strong></p>
-        <a href="/login">Login</a>
-    </div>
-
-    <a href="/home">Back to Home</a>
+    <div class="bottom"></div>
 </body>
 </html>

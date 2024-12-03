@@ -1,0 +1,326 @@
+.userHome{
+    animation: fadeInAnimation ease 2s;
+    animation-iteration-count: 1;
+    animation-fill-mode: forwards;
+    width:100%;
+    height:450px;
+    background-image: url("../images/Logo.png"),url("../images/pngtree-aesthetic-background-pink-pastel-image_866344.jpg"); 
+    border:solid 0.3em white;
+    border-bottom-color: #a7556a;
+    border-top-color:#a7556a;
+    /*background-color: aqua;*/
+    background-repeat:no-repeat, no-repeat;
+    background-size:50vw,cover;
+    background-position: center;
+    display:inline-block;
+    margin-top:-4;
+    margin-bottom: 0;
+
+    /* p{
+        top:0;
+        right:10px;
+        text-align:right;
+        
+        a{
+            color:black;
+            text-decoration:none;
+        }
+    } */
+   
+   
+    
+}
+@keyframes fadeInAnimation {
+    0% {
+        opacity: 0;
+    }
+
+    100% {
+        opacity: 1;
+    }
+}
+.TopBanner{
+    width: auto;
+    height: 50px;
+    background-color:white;
+    text-align: right;
+    border:solid 0.3em white;
+    border-bottom-color: #a7556a;
+
+   
+    p{
+        color:#a7556a;
+        font-weight: bold;
+        font-style: italic;
+        display:inline-block;
+        margin-right:30px;
+
+        
+        a{
+            color:#a7556a;
+            text-decoration:none;
+        }
+    }
+    p:hover{
+        transform: scale(1.1);
+    }
+    
+
+}
+.stepsAndIngredients{
+   
+    list-style-position: inside;
+    text-align: center;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+   
+    color:#000000;
+    font-size: large;
+
+}
+
+h1{
+    color:#a7556a;
+    font-weight: bold;
+    font-style: italic;
+    text-align:center;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    
+}
+body{
+    background-color:rgb(255, 223, 228);
+    margin:0;
+}
+
+.bbl{
+
+    .circle{
+        height: 150px;
+        width: 150px;
+        background-image:url("../images/—Pngtree—cartoon\ cute\ strawberry\ pink\ background_1056453.jpg");
+        border-radius: 50%;
+        display: inline-block;
+      
+
+    }
+    h2{
+       
+    color:white;
+    font-size:2vw;
+    text-align: center;
+    margin-bottom: 0;
+
+    }
+    width:400px;
+    height: 400px;
+    display:inline-block;
+    flex-direction: column;
+    background-color: white;
+    border-radius: 25px;
+    padding: 20px;
+    margin-left:100px;
+    margin-top: 50px;
+    background-color: #a7556a;
+    overflow-wrap: break-word;
+
+}
+.foldersContainer{
+    width:400px;
+    height: 500px;
+    display:inline-block;
+    vertical-align:top;
+   
+    background-color: white;
+    border-radius: 25px;
+    padding: 20px;
+    margin-left: 100px;
+    margin-top: 50px;
+    background-color: #a7556a;
+    margin-bottom: 100px;
+    overflow-wrap: break-word;
+}
+
+.Label{
+    p{
+        text-shadow: -1px -1px 0 #a7556a, 1px -1px 0 #a7556a, 1px 1px 0 #a7556a,
+        1px 1px 0 #a7556a;
+        color:white;
+        font-size:3vw;
+        text-align: center;
+    }
+   margin-top: 100px;
+    align-items: center;
+}
+
+.bottom{
+    width:100%;
+    height:100px;
+    background-color:white;
+    border:solid 0.3em white;
+    border-top-color:#a7556a;
+
+}
+
+h2{
+    text-shadow: -1px -1px 0 #a7556a, 1px -1px 0 #a7556a, 1px 1px 0 #a7556a,
+    1px 1px 0 #a7556a;
+    color:white;
+    font-size:4vw;
+    text-align: center;
+    margin-bottom: 0;
+   
+}
+.pp1{
+    p{
+    text-shadow: -1px -1px 0 #a7556a, 1px -1px 0 #a7556a, 1px 1px 0 #a7556a,
+    1px 1px 0 #a7556a;
+    color:rgb(255, 255, 255);
+    font-size:3vw;
+    text-align: center;
+    }
+}
+
+.searchCircles{
+    
+    display: inline-block;
+    position:relative;
+    left:5%; 
+    margin-left:200px;
+    transform: translateX(-50%);
+    margin-bottom: 100px;
+    .circle{
+        height: 150px;
+        width: 150px;
+        background-color:#a7556a;
+        border-radius: 50%;
+        text-align:center;
+      
+        border:solid 0.3em white;
+       
+    }
+
+    p{
+        color:#a7556a;
+        text-align: center;
+        font-weight:bold;
+    }
+   
+    .circle:hover{
+        transform: scale(1.1);
+    }
+}
+@keyframes fadeInUp {
+    from {
+      transform: translateY(50px);
+      opacity: 0;
+    }
+    to {
+      transform: translateY(0);
+      opacity: 1;
+    }
+  }
+  .fade-in-up {
+    animation: 0.75s both fadeInUp;
+  }
+
+.SignIn{
+    display: block;
+    margin-top:50px;
+    text-align:center;
+    width:100%;
+    
+    background-color: rgba(255, 255, 255, 0.1);
+    
+   
+    
+    form input[type="text"] { 
+        
+        width: 400px; 
+        border-radius: 25px;
+    
+        padding: 10px; 
+    
+        border: 1px solid #a7556a; 
+    
+        border-radius: 5px; 
+    
+        box-sizing: border-box; 
+        color:#a7556a;
+        font-weight: bold;
+        font-style: italic;
+    
+    }
+    label{
+        color:#a7556a;
+    }
+    form input[type="password"] { 
+        
+        width: 400px; 
+        border-radius: 25px;
+    
+        padding: 10px; 
+    
+        border: 1px solid #a7556a; 
+    
+        border-radius: 5px; 
+    
+        box-sizing: border-box; 
+        color:#a7556a;
+        font-weight: bold;
+        font-style: italic;
+    
+    }
+    button{
+        color:#a7556a;
+        background-color: white;
+        border-color: #a7556a;
+        margin-left:15px;
+        width:70px;
+        border-radius: 5px;
+        text-align:center;
+        font-style: italic;
+        font-weight: bold;
+        
+        
+    }
+    button:hover {
+        background-color: rgb(255, 223, 228); /* change to your desired color */
+    }
+    /* margin-right: auto;  */
+
+}
+
+.addButton{
+    padding:20px;
+button{
+    color:#a7556a;
+    background-color: white;
+    border-color: #a7556a;
+    
+    border-radius: 5px;
+    text-align:center;
+    font-style: italic;
+    font-weight: bold;
+    display: flex;
+  align-items: center;
+  justify-content: center;
+    
+    
+}
+button:hover {
+    background-color: rgb(255, 223, 228); /* change to your desired color */
+}
+}
+.SignandLogTop{
+    background-image: url("../images/Logo.png");
+    width:100%;
+    height:150px;
+    background-repeat:no-repeat;
+    background-position: center;
+    background-size: 30vw;
+    display: block;
+  
+}

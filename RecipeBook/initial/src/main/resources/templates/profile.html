@@ -1,27 +1,60 @@
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org">
+<link rel="stylesheet" href="../static/css/Style.css" th:href="@{/css/Style.css}">
 <head>
-    <title>Profile</title>
-    <link rel="stylesheet" type="text/css" href="/css/styles.css"/>
+
 </head>
+
 <body>
-    <h2>Welcome to your profile, <span th:text="${username}"></span>!</h2>
-    <p>Your details:</p>
+    <div class="TopBanner">
+        <p><a th:href="@{/login}">Login</a></p>
+        <p style="font-size:larger;"><a th:href="@{/home}">Recipe Book</a></p>
+        <p style="margin-right: 30%;"><a th:href="@{/register}">Register</a></p>
+        <p><a th:href="@{/profile}">Your Profile</a></p>
+
+    </div>
+   <div class="bbl">
+        <div class="circle">
+
+
+        </div>
+   <h2>Welcome to your profile, <span th:text="${username}"></span>!</h2>
+    <p style=" font-weight:bold; color:#fbfbfb;">Your details:</p>
     <ul>
-        <li>Username: <span th:text="${username}"></span></li>
-        <li>Password: <span th:text="${password}"></span> (hashed)</li>
+        <li style=" font-weight:bold; color:#fbfbfb;">Username: <span th:text="${username}"></span></li>
+        <li style=" font-weight:bold; color:#fbfbfb;">Password: <span th:text="${password}"></span> (hashed)</li>
+    </ul>
+    <a style=" font-weight:bold; color:#fbfbfb;" th:href="@{/addRecipe}" class="btn btn-primary" >Add Recipe</a> <!-- Add Recipe button -->
+
+
+   
+</div>
+<div class="foldersContainer">
+    <ul th:if="${folders != null}" th:each="folder : ${folders}">
+        <li>
+            <span th:text="${folder.name}"></span> <!-- Display the folder name -->
+            <!-- Delete button for each folder, now including CSRF token -->
+            <form th:action="@{/profile/delete/{id}(id=${folder.id})}" method="post">
+                <input type="hidden" th:name="${_csrf.parameterName}" th:value="${_csrf.token}"/>
+                <button type="submit">Delete</button>
+            </form>
+        </li>
     </ul>
     
-    <h3>Your Folders</h3>
-    <ul th:if="${folders != null}" th:each="folder : ${folders}">
-        <li th:text="${folder.name}"></li>
-    </ul>
+
+    
+    <!-- Error message display -->
+    <div th:if="${errorMessage}">
+        <p th:text="${errorMessage}" style="color: red;"></p>
+    </div>
     <form th:action="@{/folders/create}" method="post">
         <input type="text" name="folderName" placeholder="Enter Folder Name"/>
         <button type="submit">Create Folder</button>
     </form>
 
-    <a th:href="@{/addRecipe}" class="btn btn-primary">Add Recipe</a> <!-- Add Recipe button -->
-    <a th:href="@{/home}">Back to Home</a>
+</div>    
+<div class="bottom"></div>
+
 </body>
+
 </html>

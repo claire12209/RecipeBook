@@ -1,28 +1,33 @@
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org">
+<link rel="stylesheet" th:href="@{/css/Style.css}">
 <head>
     <title>Register</title>
-    <link rel="stylesheet" type="text/css" href="/css/styles.css"/>
+
 </head>
 <body>
-    <h2>Register</h2>
+    <div class ="SignandLogTop">
 
+    </div>
+    <div class="SignIn">
     <form th:action="@{/register}" th:object="${user}" method="post">
         <div>
             <label for="username">Username:</label>
             <input type="text" id="username" th:field="*{username}" required />
         </div>
-        <div>
+        <div style="margin-top: 20px;">
             <label for="password">Password:</label>
             <input type="password" id="password" th:field="*{password}" minlength="8" required />
             <!-- Error message for password validation -->
             <p th:if="${#fields.hasErrors('password')}" th:errors="*{password}">Password must be at least 8 characters long</p>
         </div>
-        <div>
+        <div style="margin-top: 20px;">
             <button type="submit">Register</button>
         </div>
     </form>
+    <p style="color:#a7556a">Already have an account? <a style="color:#a7556a" th:href="@{/login}">Login here</a></p>
+</div>
 
-    <p>Already have an account? <a th:href="@{/login}">Login here</a></p>
+    
 </body>
 </html>

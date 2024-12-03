@@ -1,60 +1,79 @@
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org">
+<link rel="stylesheet" th:href="@{/css/Style.css}">
+<script src="../static/interactive.js"></script>
+
+
 <head>
-    <title>Home</title>
-    <link rel="stylesheet" type="text/css" href="/css/styles.css"/>
+
 </head>
 <body>
+
+    <div class="TopBanner">
+        <p><a th:href="@{/login}">Login</a></p>
+        <p style="font-size:larger;"><a th:href="@{/home}">Recipe Book</a></p>
+        <p style="margin-right: 30%;"><a th:href="@{/register}">Register</a></p>
+        <p><a th:href="@{/profile}">Your Profile</a></p>
+
+    </div>
+
+    <div class="userHome">
+        <!-- <p><a th:href="@{/login}">Login</a> | <a th:href="@{/register}">Register</a></p> -->
+    </div>
+   
+    
     <h2>Welcome to the Recipe Book</h2>
-    <p>
-        <a th:href="@{/login}">Login</a> | <a th:href="@{/register}">Register</a>
-        | <a th:href="@{/profile}" class="btn btn-primary">Go to Profile</a>
-    </p>
+    
+    <div class="SignIn" >
+        <div class="pp1"><p>how are we searching today?</p></div>
 
-    <!-- Search Form -->
-    <form th:action="@{/home}" method="get">
-        <label for="search">Search Recipes:</label>
-        <input type="text" id="search" name="query" placeholder="Search by name or ingredient"
-               th:value="${query}">
-        <button type="submit">Search</button>
-    </form>
-
-    <!-- Category Filter Form -->
-    <form th:action="@{/home}" method="get">
-        <label for="category">Filter by Category:</label>
-        <select id="category" name="category">
-            <!-- Add the "ALL" option -->
-            <option value="ALL" th:selected="${category == 'ALL'}">ALL</option>
-            <!-- Loop through categories -->
-            <option th:each="category : ${categories}" 
-                    th:value="${category.name}" 
-                    th:text="${category.name}" 
-                    th:selected="${category == category.name}"></option>
-        </select>       
-        <button type="submit">Filter</button>
-    </form>
+        <form th:action="@{/home}" method="get">
+           
+            <input type="text" id="search" name="query" placeholder="Search by name or ingredient"
+                   th:value="${query}">
+            <button type="submit">Search</button>
+        </form>
+    
+        <!-- Category Filter Form -->
+        <form th:action="@{/home}" method="get" id="dropdown" style="margin-top: 20px; margin-bottom: 50px;">
+            <label for="category" style="font-style: italic; font-weight:bold">Category:</label>
+            <select id="category" name="category" style="color:#a7556a">
+                <!-- Add the "ALL" option -->
+                <option value="ALL" th:selected="${category == 'ALL'}">ALL</option>
+                <!-- Loop through categories -->
+                <option th:each="category : ${categories}" 
+                        th:value="${category.name}" 
+                        th:text="${category.name}" 
+                        th:selected="${category == category.name}"></option>
+            </select>       
+            <button type="submit">Filter</button>
+        </form >
+   
+    
+        <h2 style="margin-top:30px; margin-bottom:30px;">Recipes</h2>
+        <ul style=" width:30%; margin-top:30px; margin:auto; color:rgb(255, 223, 228)">
+            <!-- Loop through the recipes and display their name, average rating, and share button -->
+            <th:block th:each="recipe : ${recipes}" >
+                <li style="margin-bottom:30px; background-color:white; border-radius: 25px;">
+                    <!-- Recipe name as a clickable link -->
+                    <a style=" font-weight:bold; color:#a7556a;font-size: 2vw;" th:href="@{/recipe/{id}(id=${recipe.id})}" th:text="${recipe.name}">Recipe Title (ID: ${recipe.id})</a>
+                    
+                    <!-- Display the average rating for the recipe -->
+                    <p style="color: #a7556a">Average Rating: <span th:text="${recipe.averageRating}">0</span></p>
+                    
+                    <!-- Add a Share button -->
+                    <button style="margin-bottom: 20px;" th:onclick="'copyToClipboard(\'http://localhost:8080/recipe/\' + ' + ${recipe.id} + ');'">
+                        Share
+                    </button>
+                    
+                    
+                </li>
+            </th:block>
+        </ul>
     
 
-    <h3>All Recipes</h3>
-    <ul>
-        <!-- Loop through the recipes and display their name, average rating, and share button -->
-        <th:block th:each="recipe : ${recipes}">
-            <li>
-                <!-- Recipe name as a clickable link -->
-                <a th:href="@{/recipe/{id}(id=${recipe.id})}" th:text="${recipe.name}">Recipe Title (ID: ${recipe.id})</a>
-                
-                <!-- Display the average rating for the recipe -->
-                <p>Average Rating: <span th:text="${recipe.averageRating}">0</span></p>
-                
-                <!-- Add a Share button -->
-                <button th:onclick="'copyToClipboard(\'http://localhost:8080/recipe/\' + ' + ${recipe.id} + ');'">
-                    Share
-                </button>
-                
-                
-            </li>
-        </th:block>
-    </ul>
+
+   
 
     <script>
         function copyToClipboard(link) {
@@ -73,5 +92,12 @@
         }
     </script>    
     
+
+        
+    </div>
+
+    <div class="bottom"></div>
+
+
 </body>
 </html>
