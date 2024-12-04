@@ -54,4 +54,5 @@ public class RegistrationControllerTest {
             .andExpect(model().attributeExists("error"))
             .andExpect(model().attribute("error", "Password must be at least 8 characters long."));
     }
+
 }
