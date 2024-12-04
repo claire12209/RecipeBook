@@ -7,6 +7,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 
 
@@ -50,4 +51,17 @@ public class RecipeController {
         // Redirect back to the recipe details page
         return "redirect:/recipe/" + id;
     }
+
+    @PostMapping("/recipe/{id}/delete")
+    public String deleteRecipe(@PathVariable Long id, RedirectAttributes redirectAttributes) {
+        try {
+            // Use the recipeService to delete the recipe
+            recipeService.deleteById(id);
+            redirectAttributes.addFlashAttribute("successMessage", "Recipe deleted successfully!");
+        } catch (Exception e) {
+            redirectAttributes.addFlashAttribute("errorMessage", "Error deleting recipe.");
+        }
+        return "redirect:/home"; // Redirect to the home page after deletion
+    }
+
 }

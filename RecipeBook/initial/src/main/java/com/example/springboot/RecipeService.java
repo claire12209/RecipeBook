@@ -26,5 +26,10 @@ public class RecipeService {
     public void save(Recipe recipe) {
         recipeRepository.save(recipe);
     }
+
+    public void deleteById(Long id) {
+        recipeRepository.deleteById(id); // Calls JPA's deleteById method
+    }
+    
     
 }
