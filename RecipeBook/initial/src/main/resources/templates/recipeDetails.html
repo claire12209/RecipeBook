@@ -45,5 +45,52 @@
 
 
     <div class="bottom"></div>
+
+    <!-- Reviews Section -->
+    <h3>Reviews</h3>
+
+        <!-- Filter links -->
+    <div>
+        <a th:href="@{/recipe/{id}(id=${recipe.id}, filter='all')}" 
+        th:classappend="${filter == 'all' ? 'active' : ''}">
+        All Reviews
+        </a>
+        |
+        <a th:href="@{/recipe/{id}(id=${recipe.id}, filter='recent')}" 
+        th:classappend="${filter == 'recent' ? 'active' : ''}">
+        Most Recent Reviews
+        </a>
+    </div>
+    <!-- Check if there are any reviews -->
+    <div th:if="${#lists.isEmpty(reviews)}">
+        <p>No reviews yet. Be the first to review!</p>
+    </div>
+
+    <!-- Display reviews -->
+    <ul th:if="${!#lists.isEmpty(reviews)}" th:each="review : ${reviews}">
+        <li>
+            <p><strong>User:</strong> <span th:text="${review.user != null ? review.user.username : 'Anonymous'}"></span></p>
+            <p><strong>Rating:</strong> <span th:text="${review.rating}"></span> / 5</p>
+            <p><strong>Date:</strong> 
+                <span th:text="${review.formattedDate != null ? review.formattedDate : 'N/A'}"></span>
+            </p>
+            <p><strong>Comment:</strong> <span th:text="${review.comment}"></span></p>
+        </li>
+    </ul>
+    
+
+    <!-- Form for Adding a Review -->
+    <div th:if="${#authentication.name != 'anonymousUser'}">
+        <h3>Add a Review</h3>
+        <form th:action="@{/recipe/{id}/addReview(id=${recipe.id})}" method="post">
+            <label for="rating">Rating (1-5):</label>
+            <input type="number" id="rating" name="rating" min="1" max="5" required />
+            <br />
+            <label for="comment">Comment:</label>
+            <textarea id="comment" name="comment" rows="4" cols="50" required></textarea>
+            <br />
+            <button type="submit">Post Review</button>
+        </form>
+    </div>
 </body>
 </html>
