@@ -24,10 +24,6 @@ public class RecipeController {
         this.userService = userService;
     }
 
-    // Method to display the recipe details page
-    //@GetMapping("/recipes/{id}") is in HomeController.java
-
-
     // Method to handle the submission of a new review
     @PostMapping("/recipe/{id}/addReview")
     public String addReview(@PathVariable Long id,
