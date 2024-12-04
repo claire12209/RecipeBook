@@ -36,7 +36,7 @@ public class HomeController {
         @RequestParam(value = "category", required = false) String category
     ) {
         List<Recipe> recipes;
-    
+        
         if (query != null && !query.isEmpty()) {
             recipes = recipeRepository.findByNameContainingIgnoreCaseOrCategory_NameContainingIgnoreCaseOrIngredientsContainingIgnoreCase(query, query, query);
         } else if (category != null && !category.equalsIgnoreCase("ALL")) {
@@ -45,25 +45,48 @@ public class HomeController {
         } else {
             recipes = recipeRepository.findAll(); // Fetch all recipes
         }
-    
-        // Calculate and set the average rating for each recipe
+        
+        // Calculate and set the average rating for each recipe, including review ratings
         for (Recipe recipe : recipes) {
-            Double average = recipeRatingRepository.findAverageRatingByRecipeId(recipe.getId());
-            recipe.setAverageRating(average != null ? average : 0.0);
+            // Fetch recipe ratings
+            List<RecipeRating> recipeRatings = recipeRatingRepository.findByRecipeId(recipe.getId());
+            
+            // Fetch review ratings (if reviews exist)
+            List<Review> reviews = recipe.getReviews();
+            
+            // Calculate the total ratings from both recipe ratings and review ratings
+            double totalRating = 0;
+            int totalCount = 0;
+            
+            // Add recipe ratings to total
+            for (RecipeRating recipeRating : recipeRatings) {
+                totalRating += recipeRating.getRating();
+                totalCount++;
+            }
+            
+            // Add review ratings to total
+            for (Review review : reviews) {
+                totalRating += review.getRating();
+                totalCount++;
+            }
+            
+            // Calculate the average rating
+            Double average = (totalCount > 0) ? totalRating / totalCount : 0.0;
+            
+            // Set the average rating on the recipe
+            recipe.setAverageRating(average);
         }
-    
+        
         // Fetch all categories
         List<Category> categories = categoryRepository.findAll();
-    
+        
         // Add "ALL" as a string at the top of the categories
         model.addAttribute("categories", categories);
         model.addAttribute("allOption", "ALL");
         model.addAttribute("recipes", recipes);
         return "home";
     }
-    
-     
-    
+  
 
     @GetMapping("/recipesByCategory")
     public String recipesByCategory(@RequestParam("categoryId") Long categoryId, Model model) {
@@ -93,11 +116,11 @@ public class HomeController {
     
         // Force initialization of the reviews list
         recipe.getReviews().size(); // Ensure reviews are loaded
-
-        // Calculate and set the average rating
-        Double average = recipeRatingRepository.findAverageRatingByRecipeId(recipe.getId());
+    
+        // Calculate and set the average rating including both recipe ratings and review ratings
+        Double average = calculateAverageRating(recipe);
         recipe.setAverageRating(average != null ? average : 0.0);
-
+    
         // Filter reviews based on the query parameter
         List<Review> reviews;
         if ("recent".equalsIgnoreCase(filter)) {
@@ -108,7 +131,7 @@ public class HomeController {
         } else {
             reviews = recipe.getReviews(); // Show all reviews
         }
-
+    
         // Format the review dates for Thymeleaf
         reviews.forEach(review -> {
             if (review.getDate() != null) {
@@ -120,14 +143,42 @@ public class HomeController {
         model.addAttribute("recipe", recipe);
     
         // Add reviews to the model
-        model.addAttribute("reviews", recipe.getReviews());
-
-        // // Add filtered reviews to the model
-        // model.addAttribute("reviews", reviews);
-
+        model.addAttribute("reviews", reviews);
+    
+        // Add filtered reviews to the model
         model.addAttribute("filter", filter);
     
         return "recipeDetails";
+    }
+    
+    private Double calculateAverageRating(Recipe recipe) {
+        // Fetch all recipe ratings
+        List<RecipeRating> recipeRatings = recipeRatingRepository.findByRecipeId(recipe.getId());
+        // Fetch all review ratings
+        List<Review> reviews = recipe.getReviews();
+    
+        // Calculate the total ratings (RecipeRating + Review rating)
+        double totalRating = 0;
+        int totalCount = 0;
+    
+        // Add recipe ratings to total
+        for (RecipeRating recipeRating : recipeRatings) {
+            totalRating += recipeRating.getRating();
+            totalCount++;
+        }
+    
+        // Add review ratings to total
+        for (Review review : reviews) {
+            totalRating += review.getRating();
+            totalCount++;
+        }
+    
+        // Return the average if there are any ratings, otherwise return null (no ratings)
+        if (totalCount > 0) {
+            return totalRating / totalCount;
+        } else {
+            return null;
+        }
     }
     
     
