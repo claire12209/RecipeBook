@@ -1,13 +1,17 @@
 package com.example.springboot;
 
+import java.util.List;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.ModelAndView;
-
-import java.util.List;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 @Controller
 @RequestMapping("/folders")
@@ -21,29 +25,26 @@ public class FolderController {
 
     // Endpoint to create a new folder
     @PostMapping("/create")
-    public ModelAndView createFolder(@RequestParam String folderName) {
+    public ModelAndView createFolder(@RequestParam String folderName, RedirectAttributes redirectAttributes) {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         String username = authentication.getName();
         User user = userService.findByUsername(username);
-    
-        // Call createFolder and capture the result message
-        // String result = folderService.createFolder(user.getId(), folderName);
-    
+
         ModelAndView modelAndView = new ModelAndView("redirect:/profile");
-    
-        // If folder creation failed, redirect with an error message
+
         try {
             String result = folderService.createFolder(user.getId(), folderName);
             if (!"Folder created successfully.".equals(result)) {
-                modelAndView.addObject("errorMessage", result);
+                redirectAttributes.addFlashAttribute("errorMessage", result);
             }
         } catch (Exception e) {
-            modelAndView.addObject("errorMessage", "An unexpected error occurred: " + e.getMessage());
+            redirectAttributes.addFlashAttribute("errorMessage", "An unexpected error occurred: " + e.getMessage());
             e.printStackTrace(); // Print the stack trace to the console
         }
-    
+
         return modelAndView;
     }
+
     
 
     // Endpoint to get all folders by user ID

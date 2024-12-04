@@ -1,7 +1,14 @@
 package com.example.springboot;
 
-import jakarta.persistence.*;
 import java.util.Objects;
+
+import jakarta.persistence.Entity;
+import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.GenerationType;
+import jakarta.persistence.Id;
+import jakarta.persistence.JoinColumn;
+import jakarta.persistence.ManyToOne;
+import jakarta.persistence.Table;
 
 @Entity
 @Table(name = "folders")
@@ -16,6 +23,15 @@ public class Folder {
     @ManyToOne
     @JoinColumn(name = "user_id", nullable = false)
     private User user;
+
+    // Constructor with arguments for tests and initialization
+    public Folder(String name, User user) {
+        this.name = name;
+        this.user = user;
+    }
+
+    // Default no-argument constructor (required by JPA)
+    public Folder() {}
 
     // Getters and setters
     public Long getId() {
