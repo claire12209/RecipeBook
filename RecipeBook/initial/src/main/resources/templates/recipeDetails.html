@@ -33,7 +33,8 @@
             <li th:text="${step}">Step</li>
         </th:block>
     </ol>
-    <h1>Average Rating: <span th:text="${recipe.averageRating}">0</span></h1>
+    <h1>Average Rating: <span th:text="${#numbers.formatDecimal(recipe.averageRating, 0, 2)}">0</span></h1>
+
 
     <!-- Delete Button for Recipe -->
     <form th:action="@{/recipe/{id}/delete(id=${recipe.id})}" method="post" style="margin-top: 20px; text-align:center;">

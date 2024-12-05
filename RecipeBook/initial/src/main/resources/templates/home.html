@@ -59,7 +59,10 @@
                     <a style=" font-weight:bold; color:#a7556a;font-size: 2vw;" th:href="@{/recipe/{id}(id=${recipe.id})}" th:text="${recipe.name}">Recipe Title (ID: ${recipe.id})</a>
                     
                     <!-- Display the average rating for the recipe -->
-                    <p style="color: #a7556a">Average Rating: <span th:text="${recipe.averageRating}">0</span></p>
+                    <p style="color: #a7556a">Average Rating: 
+                        <span th:text="${#numbers.formatDecimal(recipe.averageRating, 0, 2)}" class="average-rating">0</span>
+                    </p>
+                    
                     
                     <!-- Add a Share button -->
                     <button style="margin-bottom: 20px;" th:onclick="'copyToClipboard(\'http://localhost:8080/recipe/\' + ' + ${recipe.id} + ');'">
